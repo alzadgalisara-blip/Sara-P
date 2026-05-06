@@ -1,0 +1,147 @@
+// =====================================
+// 🌐 موقع احترافي كامل (صفحة واحدة)
+// =====================================
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>برنامج القبول في سلطنة عمان</title>
+<style>
+body {
+  font-family: Arial;
+  background: linear-gradient(135deg, #ff6ec4, #7873f5);
+  margin: 0;
+  color: #333;
+}
+.container {padding: 20px;}
+h1, h2 {text-align: center; color: white;}
+.card {
+  background: white;
+  padding: 15px;
+  margin: 15px 0;
+  border-radius: 15px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+input, select, button {
+  padding: 10px;
+  margin: 5px;
+  border-radius: 10px;
+  border: none;
+}
+button {background: #ff4b5c; color: white; cursor: pointer;}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<h1>🎓 برنامج القبول في سلطنة عمان</h1>
+<p style="color:white;text-align:center;">يساعدك على معرفة التخصص المناسب لك حسب درجاتك ومعدلك التنافسي</p>
+
+<div class="card">
+<h3>ادخل موادك</h3>
+<div id="subjects"></div>
+<button onclick="addSubject()">➕ إضافة مادة</button>
+
+<h3>الحالة الصحية</h3>
+<select id="health">
+  <option>لا يوجد</option>
+  <option>مشاكل بصرية</option>
+  <option>مشاكل حركية</option>
+</select>
+
+<br><br>
+<button onclick="calculate()">احسب</button>
+</div>
+
+<div id="result"></div>
+
+<footer style="text-align:center;color:white;margin-top:20px;">
+© تقديم سارة الزدجالي / اشراف سعاد العلوي / عمرة بنت رواحة
+</footer>
+
+</div>
+
+<script>
+let subjects = [];
+
+function addSubject() {
+  const div = document.getElementById('subjects');
+  const i = subjects.length;
+  subjects.push({});
+
+  div.innerHTML += `
+  <div>
+    <input placeholder="المادة" id="name${i}">
+    <input placeholder="الدرجة" id="grade${i}">
+  </div>`;
+}
+
+function calculate() {
+  let total = 0, count = 0;
+
+  subjects.forEach((s,i)=>{
+    let g = document.getElementById(`grade${i}`).value;
+    if(g){ total += parseFloat(g); count++; }
+  });
+
+  let avg = total / count;
+  let comp = avg; // معدل تنافسي مبسط
+  let health = document.getElementById('health').value;
+
+  let majors = [
+    {
+      name:"الطب",
+      min:95,
+      last:98,
+      uni:["جامعة السلطان قابوس"],
+      desc:"تخصص طبي لعلاج المرضى",
+      jobs:["طبيب","جراح"],
+      block:["مشاكل بصرية","مشاكل حركية"]
+    },
+    {
+      name:"هندسة البرمجيات",
+      min:85,
+      last:90,
+      uni:["جامعة السلطان قابوس","الكلية التقنية"],
+      desc:"تطوير التطبيقات والأنظمة",
+      jobs:["مبرمج","مهندس نظم"],
+      block:[]
+    },
+    {
+      name:"إدارة الأعمال",
+      min:75,
+      last:80,
+      uni:["جامعة نزوى","كلية الشرق الأوسط"],
+      desc:"إدارة الشركات",
+      jobs:["مدير","محاسب"],
+      block:[]
+    }
+  ];
+
+  let html = `<div class="card"><h2>معدلك العام: ${avg.toFixed(2)}</h2><h2>المعدل التنافسي: ${comp.toFixed(2)}</h2></div>`;
+
+  majors.forEach(m=>{
+    let eligible = comp >= m.min && !m.block.includes(health);
+
+    html += `
+    <div class="card">
+    <h3>${m.name}</h3>
+    <p>${m.desc}</p>
+    <p>آخر معدل قبول: ${m.last}</p>
+    <p>أقل معدل: ${m.min}</p>
+    <p>الجامعات: ${m.uni.join(" - ")}</p>
+    <p>الوظائف المقترحة: ${m.jobs.join(" - ")}</p>
+    <p>${eligible ? '✅ مرشح لهذا التخصص' : '❌ غير مرشح'}</p>
+    </div>`;
+  });
+
+  document.getElementById('result').innerHTML = html;
+}
+</script>
+
+</body>
+</html>
+
+
