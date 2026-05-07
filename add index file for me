@@ -1,0 +1,616 @@
+// ===============================================
+// مشروع منصة القبول الجامعي والوظائف في سلطنة عمان
+// تقديم: سارة الزدجالي
+// إشراف: سعاد العلوي
+// عمرة بنت رواحة
+// ===============================================
+
+// ===============================================
+// طريقة التشغيل
+// ===============================================
+
+// 1- افتحي terminal
+// 2- اكتبي:
+
+// npx create-vite@latest oman-platform --template react
+// cd oman-platform
+// npm install
+// npm install react-router-dom framer-motion
+// npm install -D tailwindcss postcss autoprefixer
+// npx tailwindcss init -p
+
+// ثم انسخي هذا الكود داخل src/App.jsx
+
+// ===============================================
+
+import { BrowserRouter, Routes, Route, Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
+
+// ===============================================
+// بيانات الجامعات والتخصصات
+// ===============================================
+
+const universities = [
+
+  {
+    university: "جامعة السلطان قابوس",
+    major: "الطب",
+    description: "دراسة الطب البشري والرعاية الصحية.",
+    lastAccepted: 97,
+    minAccepted: 95
+  },
+
+  {
+    university: "جامعة التقنية والعلوم التطبيقية",
+    major: "هندسة البرمجيات",
+    description: "برمجة وتطوير الأنظمة والتطبيقات.",
+    lastAccepted: 89,
+    minAccepted: 82
+  },
+
+  {
+    university: "الجامعة الألمانية",
+    major: "الهندسة المعمارية",
+    description: "تصميم المباني والمنشآت الحديثة.",
+    lastAccepted: 91,
+    minAccepted: 84
+  },
+
+  {
+    university: "جامعة نزوى",
+    major: "الصيدلة",
+    description: "دراسة الأدوية والعلاجات الطبية.",
+    lastAccepted: 88,
+    minAccepted: 80
+  },
+
+  {
+    university: "كلية الشرق الأوسط",
+    major: "الأمن السيبراني",
+    description: "حماية الأنظمة والشبكات.",
+    lastAccepted: 86,
+    minAccepted: 78
+  },
+
+  {
+    university: "جامعة صحار",
+    major: "إدارة الأعمال",
+    description: "الإدارة والتسويق والاقتصاد.",
+    lastAccepted: 80,
+    minAccepted: 70
+  },
+
+  {
+    university: "جامعة البريمي",
+    major: "الذكاء الاصطناعي",
+    description: "تطوير أنظمة الذكاء الاصطناعي.",
+    lastAccepted: 90,
+    minAccepted: 84
+  },
+
+  {
+    university: "كلية عمان للسياحة",
+    major: "إدارة السياحة",
+    description: "إدارة الفنادق والسياحة.",
+    lastAccepted: 75,
+    minAccepted: 65
+  },
+
+  {
+    university: "كلية مزون",
+    major: "التصميم الجرافيكي",
+    description: "تصميم الشعارات والإعلانات.",
+    lastAccepted: 78,
+    minAccepted: 68
+  },
+
+  {
+    university: "كلية الخليج",
+    major: "القانون",
+    description: "دراسة الأنظمة والقوانين.",
+    lastAccepted: 83,
+    minAccepted: 74
+  }
+
+];
+
+// ===============================================
+// الوظائف الحقيقية
+// ===============================================
+
+const jobs = [
+
+  {
+    title: "مطور برمجيات",
+    company: "LinkedIn Jobs",
+    link: "https://www.linkedin.com/jobs/"
+  },
+
+  {
+    title: "أخصائي أمن سيبراني",
+    company: "Bayt",
+    link: "https://www.bayt.com"
+  },
+
+  {
+    title: "محلل بيانات",
+    company: "Indeed",
+    link: "https://www.indeed.com"
+  },
+
+  {
+    title: "مهندس شبكات",
+    company: "GulfTalent",
+    link: "https://www.gulftalent.com"
+  },
+
+  {
+    title: "مصمم جرافيك",
+    company: "وظف",
+    link: "https://wuzzuf.net"
+  },
+
+  {
+    title: "مهندس مدني",
+    company: "Oman Jobs",
+    link: "https://omanjobs.om"
+  },
+
+  {
+    title: "محاسب",
+    company: "LinkedIn",
+    link: "https://linkedin.com/jobs"
+  },
+
+  {
+    title: "أخصائي ذكاء اصطناعي",
+    company: "Google Careers",
+    link: "https://careers.google.com"
+  }
+
+];
+
+// ===============================================
+// الصفحة الرئيسية
+// ===============================================
+
+function Home() {
+
+  return (
+
+    <div className="min-h-screen bg-gradient-to-r from-blue-700 to-cyan-500 text-white flex flex-col justify-center items-center p-10">
+
+      <img
+        src="https://cdn-icons-png.flaticon.com/512/3135/3135755.png"
+        className="w-40 mb-6"
+      />
+
+      <h1 className="text-5xl font-bold mb-6 text-center">
+        منصة القبول الجامعي والوظائف
+      </h1>
+
+      <p className="text-xl max-w-3xl text-center mb-10">
+        منصة ذكية تساعد الطلاب والخريجين في سلطنة عمان
+        على معرفة فرص القبول الجامعي والتخصصات المناسبة
+        والبعثات الخارجية والوظائف المتوافقة مع مؤهلاتهم.
+      </p>
+
+      <div className="flex gap-6">
+
+        <Link
+          to="/interests"
+          className="bg-white text-blue-700 px-8 py-4 rounded-2xl text-xl font-bold"
+        >
+          البحث عن الجامعات
+        </Link>
+
+        <Link
+          to="/jobs"
+          className="bg-yellow-300 text-black px-8 py-4 rounded-2xl text-xl font-bold"
+        >
+          البحث عن الوظائف
+        </Link>
+
+      </div>
+
+      <div className="mt-16 text-center text-lg">
+        <p>تقديم: سارة الزدجالي</p>
+        <p>إشراف: سعاد العلوي</p>
+        <p>عمرة بنت رواحة</p>
+      </div>
+
+    </div>
+
+  );
+
+}
+
+// ===============================================
+// صفحة الميول
+// ===============================================
+
+function Interests() {
+
+  const navigate = useNavigate();
+
+  return (
+
+    <div className="min-h-screen bg-white p-10">
+
+      <h1 className="text-5xl font-bold text-center mb-10">
+        معلومات الطالب
+      </h1>
+
+      <div className="max-w-3xl mx-auto bg-gray-100 p-10 rounded-3xl shadow-2xl">
+
+        <input
+          placeholder="ما هي ميولك؟"
+          className="w-full p-4 rounded-xl mb-4"
+        />
+
+        <input
+          placeholder="ما هي التخصصات التي تحبها؟"
+          className="w-full p-4 rounded-xl mb-4"
+        />
+
+        <textarea
+          placeholder="هل تعاني من مشاكل صحية؟"
+          className="w-full p-4 rounded-xl mb-4 h-32"
+        />
+
+        <button
+          onClick={() => navigate("/admission")}
+          className="bg-blue-700 text-white w-full py-4 rounded-2xl text-xl"
+        >
+          التالي
+        </button>
+
+      </div>
+
+    </div>
+
+  );
+
+}
+
+// ===============================================
+// صفحة حساب المعدل
+// ===============================================
+
+function Admission() {
+
+  const navigate = useNavigate();
+
+  const [subjects, setSubjects] = useState([
+    { name: "", grade: "" }
+  ]);
+
+  const addSubject = () => {
+
+    setSubjects([
+      ...subjects,
+      { name: "", grade: "" }
+    ]);
+
+  };
+
+  const handleChange = (index, field, value) => {
+
+    const updated = [...subjects];
+
+    updated[index][field] = value;
+
+    setSubjects(updated);
+
+  };
+
+  const calculate = () => {
+
+    let total = 0;
+
+    subjects.forEach((s) => {
+      total += Number(s.grade);
+    });
+
+    const avg = total / subjects.length;
+
+    localStorage.setItem("average", avg);
+
+    navigate("/universities");
+
+  };
+
+  return (
+
+    <div className="min-h-screen bg-blue-50 p-10">
+
+      <h1 className="text-5xl font-bold text-center mb-10">
+        حساب المعدل التنافسي
+      </h1>
+
+      <div className="max-w-4xl mx-auto">
+
+        {subjects.map((subject, index) => (
+
+          <div key={index} className="grid grid-cols-2 gap-4 mb-4">
+
+            <input
+              placeholder="اسم المادة"
+              className="p-4 rounded-xl"
+              onChange={(e) =>
+                handleChange(index, "name", e.target.value)
+              }
+            />
+
+            <input
+              type="number"
+              placeholder="الدرجة"
+              className="p-4 rounded-xl"
+              onChange={(e) =>
+                handleChange(index, "grade", e.target.value)
+              }
+            />
+
+          </div>
+
+        ))}
+
+        <div className="flex gap-4 mt-6">
+
+          <button
+            onClick={addSubject}
+            className="bg-green-600 text-white px-6 py-4 rounded-2xl"
+          >
+            إضافة مادة
+          </button>
+
+          <button
+            onClick={calculate}
+            className="bg-blue-700 text-white px-6 py-4 rounded-2xl"
+          >
+            حساب المعدل
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  );
+
+}
+
+// ===============================================
+// صفحة الجامعات
+// ===============================================
+
+function Universities() {
+
+  const average = localStorage.getItem("average");
+
+  return (
+
+    <div className="min-h-screen bg-white p-10">
+
+      <h1 className="text-5xl font-bold text-center mb-4">
+        اقتراحات الجامعات والتخصصات
+      </h1>
+
+      <p className="text-center text-2xl mb-10">
+        معدلك التنافسي: {average}
+      </p>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+        {universities.map((u, index) => (
+
+          <div
+            key={index}
+            className="bg-blue-100 p-6 rounded-3xl shadow-xl"
+          >
+
+            <img
+              src="https://cdn-icons-png.flaticon.com/512/8074/8074800.png"
+              className="w-24 mb-4"
+            />
+
+            <h2 className="text-2xl font-bold mb-4">
+              {u.university}
+            </h2>
+
+            <p className="mb-2">
+              التخصص: {u.major}
+            </p>
+
+            <p className="mb-4">
+              {u.description}
+            </p>
+
+            <p>
+              آخر معدل قبول: {u.lastAccepted}
+            </p>
+
+            <p>
+              أقل معدل قبول: {u.minAccepted}
+            </p>
+
+          </div>
+
+        ))}
+
+      </div>
+
+      {average >= 92 && (
+
+        <div className="mt-12 bg-yellow-200 p-10 rounded-3xl">
+
+          <h2 className="text-4xl font-bold mb-6 text-center">
+            البعثات الخارجية
+          </h2>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+            <div className="bg-white p-6 rounded-2xl">
+              بعثة الطب - المملكة المتحدة
+            </div>
+
+            <div className="bg-white p-6 rounded-2xl">
+              بعثة الذكاء الاصطناعي - اليابان
+            </div>
+
+            <div className="bg-white p-6 rounded-2xl">
+              بعثة الهندسة - ألمانيا
+            </div>
+
+            <div className="bg-white p-6 rounded-2xl">
+              بعثة الأمن السيبراني - كندا
+            </div>
+
+          </div>
+
+        </div>
+
+      )}
+
+    </div>
+
+  );
+
+}
+
+// ===============================================
+// صفحة الوظائف
+// ===============================================
+
+function JobsPage() {
+
+  const navigate = useNavigate();
+
+  return (
+
+    <div className="min-h-screen bg-gray-100 p-10">
+
+      <h1 className="text-5xl font-bold text-center mb-10">
+        بيانات الباحث عن عمل
+      </h1>
+
+      <div className="max-w-3xl mx-auto bg-white p-10 rounded-3xl shadow-2xl">
+
+        <input
+          placeholder="الاسم الكامل"
+          className="w-full p-4 rounded-xl mb-4"
+        />
+
+        <textarea
+          placeholder="السيرة الذاتية"
+          className="w-full p-4 rounded-xl mb-4 h-40"
+        />
+
+        <textarea
+          placeholder="الشهادات والخبرات"
+          className="w-full p-4 rounded-xl mb-4 h-40"
+        />
+
+        <button
+          onClick={() => navigate("/job-results")}
+          className="bg-blue-700 text-white w-full py-4 rounded-2xl text-xl"
+        >
+          عرض الوظائف المناسبة
+        </button>
+
+      </div>
+
+    </div>
+
+  );
+
+}
+
+// ===============================================
+// نتائج الوظائف
+// ===============================================
+
+function JobResults() {
+
+  return (
+
+    <div className="min-h-screen bg-blue-50 p-10">
+
+      <h1 className="text-5xl font-bold text-center mb-10">
+        الوظائف المناسبة لك
+      </h1>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+        {jobs.map((job, index) => (
+
+          <div
+            key={index}
+            className="bg-white p-8 rounded-3xl shadow-xl"
+          >
+
+            <img
+              src="https://cdn-icons-png.flaticon.com/512/1995/1995574.png"
+              className="w-24 mb-4"
+            />
+
+            <h2 className="text-2xl font-bold mb-4">
+              {job.title}
+            </h2>
+
+            <p className="mb-4">
+              الشركة: {job.company}
+            </p>
+
+            <a
+              href={job.link}
+              target="_blank"
+              className="bg-blue-700 text-white px-6 py-3 rounded-xl inline-block"
+            >
+              التقديم على الوظيفة
+            </a>
+
+          </div>
+
+        ))}
+
+      </div>
+
+    </div>
+
+  );
+
+}
+
+// ===============================================
+// التطبيق الرئيسي
+// ===============================================
+
+export default function App() {
+
+  return (
+
+    <BrowserRouter>
+
+      <Routes>
+
+        <Route path="/" element={<Home />} />
+
+        <Route path="/interests" element={<Interests />} />
+
+        <Route path="/admission" element={<Admission />} />
+
+        <Route path="/universities" element={<Universities />} />
+
+        <Route path="/jobs" element={<JobsPage />} />
+
+        <Route path="/job-results" element={<JobResults />} />
+
+      </Routes>
+
+    </BrowserRouter>
+
+  );
+
+}
