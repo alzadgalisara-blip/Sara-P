@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>منصة القبول الجامعي والوظائف</title>
+
+<style>
+
+body{
+font-family: Arial;
+margin:0;
+padding:0;
+background:linear-gradient(to right,#0066ff,#00c6ff);
+color:white;
+}
+
+.container{
+max-width:1200px;
+margin:auto;
+padding:20px;
+}
+
+.title{
+text-align:center;
+font-size:45px;
+font-weight:bold;
+margin-top:20px;
+}
+
+.subtitle{
+text-align:center;
+font-size:22px;
+margin-bottom:30px;
+}
+
+.card{
+background:white;
+color:black;
+padding:20px;
+margin:20px 0;
+border-radius:20px;
+box-shadow:0 5px 15px rgba(0,0,0,0.2);
+}
+
+input,textarea{
+width:100%;
+padding:15px;
+margin-top:10px;
+border:none;
+border-radius:10px;
+font-size:16px;
+}
+
+button{
+padding:15px 25px;
+background:#0044ff;
+color:white;
+border:none;
+border-radius:15px;
+font-size:18px;
+cursor:pointer;
+margin-top:15px;
+}
+
+button:hover{
+background:#002aff;
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+gap:20px;
+}
+
+.result{
+background:yellow;
+color:black;
+padding:15px;
+border-radius:15px;
+margin-top:20px;
+font-size:22px;
+font-weight:bold;
+}
+
+.footer{
+text-align:center;
+margin-top:50px;
+font-size:20px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="title">
+منصة القبول الجامعي والوظائف
+</div>
+
+<div class="subtitle">
+منصة ذكية تساعد الطلاب والخريجين في سلطنة عمان على معرفة التخصصات المناسبة والجامعات وفرص الوظائف.
+</div>
+
+<div class="card">
+
+<h2>بيانات الطالب</h2>
+
+<input type="text" id="name" placeholder="اسم الطالب">
+
+<input type="text" id="interests" placeholder="ما هي ميولك؟">
+
+<input type="text" id="majorInterest" placeholder="ما هي التخصصات التي تحبها؟">
+
+<textarea id="health" placeholder="هل تعاني من أي مشاكل صحية؟"></textarea>
+
+</div>
+
+<div class="card">
+
+<h2>إدخال المواد والدرجات</h2>
+
+<div id="subjects"></div>
+
+<button onclick="addSubject()">
+إضافة مادة
+</button>
+
+<button onclick="calculateAverage()">
+حساب المعدل
+</button>
+
+<div id="averageResult" class="result"></div>
+
+</div>
+
+<div class="card">
+
+<h2>الجامعات والتخصصات المناسبة</h2>
+
+<div id="universities" class="grid"></div>
+
+</div>
+
+<div class="card">
+
+<h2>الوظائف المقترحة</h2>
+
+<div id="jobs" class="grid"></div>
+
+</div>
+
+<div class="footer">
+
+<p>تقديم: سارة الزدجالي</p>
+
+<p>إشراف: سعاد العلوي</p>
+
+<p>عمرة بنت رواحة</p>
+
+</div>
+
+</div>
+
+<script>
+
+const universities = [
+
+{
+university:"جامعة السلطان قابوس",
+major:"الطب",
+description:"دراسة الطب والرعاية الصحية",
+lastAccepted:97,
+minAccepted:95,
+job:"طبيب",
+health:"مناسب لمن لا يعاني من مشاكل صحية شديدة"
+},
+
+{
+university:"جامعة التقنية والعلوم التطبيقية",
+major:"هندسة البرمجيات",
+description:"برمجة وتصميم التطبيقات",
+lastAccepted:89,
+minAccepted:82,
+job:"مطور برمجيات",
+health:"مناسب لمعظم الحالات الصحية"
+},
+
+{
+university:"كلية الشرق الأوسط",
+major:"الأمن السيبراني",
+description:"حماية الأنظمة والشبكات",
+lastAccepted:86,
+minAccepted:78,
+job:"أخصائي أمن سيبراني",
+health:"مناسب لمحبي العمل التقني"
+},
+
+{
+university:"جامعة البريمي",
+major:"الذكاء الاصطناعي",
+description:"تطوير الأنظمة الذكية",
+lastAccepted:90,
+minAccepted:84,
+job:"أخصائي ذكاء اصطناعي",
+health:"مناسب للأعمال المكتبية"
+},
+
+{
+university:"جامعة صحار",
+major:"إدارة الأعمال",
+description:"الإدارة والتسويق والاقتصاد",
+lastAccepted:80,
+minAccepted:70,
+job:"مدير أعمال",
+health:"مناسب للجميع"
+}
+
+];
+
+const jobs = [
+
+{
+title:"مطور برمجيات",
+company:"LinkedIn",
+link:"https://www.linkedin.com/jobs/"
+},
+
+{
+title:"أخصائي أمن سيبراني",
+company:"Bayt",
+link:"https://www.bayt.com"
+},
+
+{
+title:"محلل بيانات",
+company:"Indeed",
+link:"https://www.indeed.com"
+},
+
+{
+title:"أخصائي ذكاء اصطناعي",
+company:"Google Careers",
+link:"https://careers.google.com"
+}
+
+];
+
+function addSubject(){
+
+const div = document.createElement('div');
+
+div.innerHTML = `
+<input type="text" placeholder="اسم المادة" class="subjectName">
+<input type="number" placeholder="الدرجة" class="subjectGrade">
+`;
+
+document.getElementById('subjects').appendChild(div);
+
+}
+
+addSubject();
+
+function calculateAverage(){
+
+const grades = document.querySelectorAll('.subjectGrade');
+
+let total = 0;
+
+grades.forEach(g=>{
+total += Number(g.value);
+});
+
+const avg = (total / grades.length).toFixed(2);
+
+let resultText = `معدلك التنافسي: ${avg}%`;
+
+if(avg >= 90){
+resultText += ' - أنت مرشح قوي للتخصصات الطبية والهندسية';
+}
+else if(avg >= 80){
+resultText += ' - لديك فرص ممتازة في تخصصات التقنية والإدارة';
+}
+else{
+resultText += ' - لديك فرص جيدة في عدة تخصصات';
+}
+
+document.getElementById('averageResult').innerHTML = resultText;
+
+showUniversities(avg);
+
+showJobs();
+
+}
+
+function showUniversities(avg){
+
+const container = document.getElementById('universities');
+
+container.innerHTML = '';
+
+universities.forEach(u=>{
+
+let accepted = avg >= u.minAccepted ? 'مرشح لهذا التخصص ✅' : 'غير مرشح ❌';
+
+container.innerHTML += `
+
+<div class="card">
+
+<h3>${u.university}</h3>
+
+<p><strong>التخصص:</strong> ${u.major}</p>
+
+<p>${u.description}</p>
+
+<p><strong>آخر معدل قبول:</strong> ${u.lastAccepted}</p>
+
+<p><strong>أقل معدل قبول:</strong> ${u.minAccepted}</p>
+
+<p><strong>الحالة:</strong> ${accepted}</p>
+
+<p><strong>الحالة الصحية:</strong> ${u.health}</p>
+
+<p><strong>الوظيفة المستقبلية:</strong> ${u.job}</p>
+
+</div>
+
+`;
+
+});
+
+}
+
+function showJobs(){
+
+const container = document.getElementById('jobs');
+
+container.innerHTML = '';
+
+jobs.forEach(job=>{
+
+container.innerHTML += `
+
+<div class="card">
+
+<h3>${job.title}</h3>
+
+<p>${job.company}</p>
+
+<a href="${job.link}" target="_blank">
+
+<button>
+التقديم على الوظيفة
+</button>
+
+</a>
+
+</div>
+
+`;
+
+});
+
+}
+
+</script>
+
+</body>
+</html>
